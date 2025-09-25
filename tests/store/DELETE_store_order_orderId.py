@@ -1,7 +1,6 @@
 import requests
 from datetime import datetime
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_delete_order_success():
     # Cria um pedido para garantir que existe para deletar

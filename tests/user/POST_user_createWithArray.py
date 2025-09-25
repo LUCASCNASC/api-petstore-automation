@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_create_users_with_array_success():
     users = [

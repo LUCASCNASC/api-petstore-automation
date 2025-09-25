@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_logout_user_success():
     # O logout não exige autenticação real, apenas chama o endpoint

@@ -1,7 +1,6 @@
 import requests
+from config import BASE_URL
 from datetime import datetime
-
-BASE_URL = "https://petstore.swagger.io/v2"
 
 def test_place_order_success():
     payload = {

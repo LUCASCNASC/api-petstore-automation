@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_find_pet_by_status_success():
     status = "pending"

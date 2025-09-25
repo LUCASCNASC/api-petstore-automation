@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_delete_pet_success():
     # Primeiro, cria um pet para garantir que ele exista para deletar

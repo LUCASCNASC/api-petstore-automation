@@ -1,9 +1,10 @@
 import requests
+from config import BASE_URL
 
 def test_upload_pet_image_success():
     # Dados do teste
     pet_id = 1  # ID de um pet existente na API (altere conforme necessário)
-    url = f"https://petstore.swagger.io/v2/pet/{pet_id}/uploadImage"
+    url = f"{BASE_URL}pet/{pet_id}/uploadImage"
     metadata = "Foto do cachorro feliz"
     # Crie um arquivo de imagem de teste (pode ser qualquer arquivo pequeno, até um .txt)
     files = {

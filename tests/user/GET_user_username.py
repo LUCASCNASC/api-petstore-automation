@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_get_user_by_name_success():
     # Garante que o usuário existe antes de buscar

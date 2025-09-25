@@ -1,6 +1,5 @@
 import requests
-
-BASE_URL = "https://petstore.swagger.io/v2"
+from config import BASE_URL
 
 def test_get_inventory_success():
     response = requests.get(f"{BASE_URL}/store/inventory")
