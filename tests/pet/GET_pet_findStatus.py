@@ -1,9 +1,10 @@
 import requests
 from config import BASE_URL
+API_PATH = "/pet/findByStatus"
 
 def test_find_pet_by_status_success():
     status = "pending"
-    response = requests.get(f"{BASE_URL}/pet/findByStatus", params={"status": status})
+    response = requests.get(f"{BASE_URL}/{API_PATH}", params={"status": status})
     assert response.status_code == 200
     pets = response.json()
     assert isinstance(pets, list)

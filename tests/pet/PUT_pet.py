@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+API_PATH = "/pet"
 
 def test_update_pet_success():
     payload = {
@@ -10,7 +11,7 @@ def test_update_pet_success():
         "tags": [{"id": 1, "name": "cute"}],
         "status": "pending"
     }
-    response = requests.put(f"{BASE_URL}/pet", json=payload)
+    response = requests.put(f"{BASE_URL}/{API_PATH}", json=payload)
     assert response.status_code == 200
     resp_json = response.json()
     assert resp_json["id"] == payload["id"]

@@ -1,6 +1,7 @@
 import requests
 from datetime import datetime
 from config import BASE_URL
+API_PATH = "/store/order"
 
 def test_delete_order_success():
     # Cria um pedido para garantir que existe para deletar
@@ -12,12 +13,12 @@ def test_delete_order_success():
         "status": "placed",
         "complete": True
     }
-    requests.post(f"{BASE_URL}/store/order", json=payload)
+    requests.post(f"{BASE_URL}/{API_PATH}", json=payload)
 
     # Deleta o pedido
-    response = requests.delete(f"{BASE_URL}/store/order/{payload['id']}")
+    response = requests.delete(f"{BASE_URL}/{API_PATH}/{payload['id']}")
     assert response.status_code == 200
 
     # Garante que o pedido foi deletado
-    get_response = requests.get(f"{BASE_URL}/store/order/{payload['id']}")
+    get_response = requests.get(f"{BASE_URL}/{API_PATH}/{payload['id']}")
     assert get_response.status_code == 404

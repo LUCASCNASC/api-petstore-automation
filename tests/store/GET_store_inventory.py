@@ -1,8 +1,9 @@
 import requests
 from config import BASE_URL
+API_PATH = "/store/inventory"
 
 def test_get_inventory_success():
-    response = requests.get(f"{BASE_URL}/store/inventory")
+    response = requests.get(f"{BASE_URL}/{API_PATH}")
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, dict)

@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+API_PATH = "/user/createWithList"
 
 def test_create_users_with_list_success():
     users = [
@@ -24,7 +25,7 @@ def test_create_users_with_list_success():
             "userStatus": 1
         }
     ]
-    response = requests.post(f"{BASE_URL}/user/createWithList", json=users)
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
     assert response.status_code == 200 or response.status_code == 201
     # A resposta geralmente é uma mensagem de sucesso (string ou objeto)
     assert "message" in response.text or "ok" in response.text.lower()

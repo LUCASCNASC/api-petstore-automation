@@ -1,6 +1,7 @@
 import requests
 from config import BASE_URL
 from datetime import datetime
+API_PATH = "/store/order"
 
 def test_place_order_success():
     payload = {
@@ -11,7 +12,7 @@ def test_place_order_success():
         "status": "placed",
         "complete": True
     }
-    response = requests.post(f"{BASE_URL}/store/order", json=payload)
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=payload)
     assert response.status_code == 200
     resp_json = response.json()
     assert resp_json["id"] == payload["id"]

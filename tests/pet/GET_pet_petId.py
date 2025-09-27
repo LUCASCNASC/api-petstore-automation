@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+API_PATH = "/pet"
 
 def test_get_pet_by_id_success():
     # Primeiro, cria um pet para garantir que ele exista
@@ -11,9 +12,9 @@ def test_get_pet_by_id_success():
         "tags": [{"id": 1, "name": "cute"}],
         "status": "available"
     }
-    requests.post(f"{BASE_URL}/pet", json=payload)
+    requests.post(f"{BASE_URL}/{API_PATH}", json=payload)
 
-    response = requests.get(f"{BASE_URL}/pet/{payload['id']}")
+    response = requests.get(f"{BASE_URL}/{API_PATH}/{payload['id']}")
     assert response.status_code == 200
     pet = response.json()
     assert pet["id"] == payload["id"]

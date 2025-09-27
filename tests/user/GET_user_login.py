@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+API_PATH = "/user/login"
 
 def test_login_user_success():
     # Cria o usuário para garantir que existe
@@ -16,7 +17,7 @@ def test_login_user_success():
     requests.post(f"{BASE_URL}/user", json=user)
 
     response = requests.get(
-        f"{BASE_URL}/user/login",
+        f"{BASE_URL}/{API_PATH}",
         params={"username": user["username"], "password": user["password"]}
     )
     assert response.status_code == 200

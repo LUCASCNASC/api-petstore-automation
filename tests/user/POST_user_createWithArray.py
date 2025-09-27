@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+API_PATH = "/user/createWithArray"
 
 def test_create_users_with_array_success():
     users = [
@@ -24,6 +25,6 @@ def test_create_users_with_array_success():
             "userStatus": 1
         }
     ]
-    response = requests.post(f"{BASE_URL}/user/createWithArray", json=users)
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
     assert response.status_code == 200 or response.status_code == 201
     assert "message" in response.text or "ok" in response.text.lower()

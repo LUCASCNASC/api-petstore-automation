@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+API_PATH = "/user"
 
 def test_create_user_success():
     user = {
@@ -12,6 +13,6 @@ def test_create_user_success():
         "phone": "555444333",
         "userStatus": 1
     }
-    response = requests.post(f"{BASE_URL}/user", json=user)
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=user)
     assert response.status_code == 200 or response.status_code == 201
     assert "message" in response.text or "ok" in response.text.lower()
