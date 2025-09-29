@@ -28,3 +28,51 @@ def test_update_user_success():
     resp_json = get_response.json()
     assert resp_json["firstName"] == "UserUpdated"
     assert resp_json["email"] == "updateduser@email.com"
+
+def test_update_user_nonexistent():
+    updated_user = {
+        "id": 99999,
+        "username": "usernotfound",
+        "firstName": "User",
+        "lastName": "NotFound",
+        "email": "notfound@email.com",
+        "password": "passnotfound",
+        "phone": "000000000",
+        "userStatus": 1
+    }
+    response = requests.put(f"{BASE_URL}/{API_PATH}/usernotfound", json=updated_user)
+    assert response.status_code in [404, 400]
+
+def test_update_user_missing_fields():
+    user = {
+        "id": 10015,
+        "username": "userupdatemissing",
+        "firstName": "User",
+        "lastName": "UpMissing",
+        "email": "missing@email.com",
+        "password": "passmissing",
+        "phone": "555666777",
+        "userStatus": 1
+    }
+    requests.post(f"{BASE_URL}/{API_PATH}", json=user)
+
+    updated_user = user.copy()
+    del updated_user["firstName"]
+    del updated_user["email"]
+
+    response = requests.put(f"{BASE_URL}/{API_PATH}/{user['username']}", json=updated_user)
+    assert response.status_code in [400, 422, 200]
+
+def test_update_user_invalid_username():
+    updated_user = {
+        "id": 10016,
+        "username": "invalid!@#",
+        "firstName": "User",
+        "lastName": "Invalid",
+        "email": "invalid@email.com",
+        "password": "passinvalid",
+        "phone": "999888777",
+        "userStatus": 1
+    }
+    response = requests.put(f"{BASE_URL}/{API_PATH}/invalid!@#", json=updated_user)
+    assert response.status_code in [400, 404]

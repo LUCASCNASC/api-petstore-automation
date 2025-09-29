@@ -27,5 +27,50 @@ def test_create_users_with_list_success():
     ]
     response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
     assert response.status_code == 200 or response.status_code == 201
-    # A resposta geralmente é uma mensagem de sucesso (string ou objeto)
     assert "message" in response.text or "ok" in response.text.lower()
+
+def test_create_users_with_list_empty():
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=[])
+    assert response.status_code in [400, 405, 422]
+
+def test_create_users_with_list_missing_fields():
+    users = [
+        {
+            "id": 10013,
+            # "username" omitido
+            "firstName": "User",
+            "lastName": "ListNoUsername",
+            "email": "nousername@email.com",
+            "password": "passlist",
+            "phone": "123456789",
+            "userStatus": 1
+        }
+    ]
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
+    assert response.status_code in [400, 405]
+
+def test_create_users_with_list_duplicate():
+    users = [
+        {
+            "id": 10001,
+            "username": "userlist1",
+            "firstName": "User",
+            "lastName": "ListOne",
+            "email": "userlist1@email.com",
+            "password": "pass123",
+            "phone": "123456789",
+            "userStatus": 1
+        },
+        {
+            "id": 10001,
+            "username": "userlist1",
+            "firstName": "UserDuplicate",
+            "lastName": "ListOneDup",
+            "email": "userlist1dup@email.com",
+            "password": "passdup",
+            "phone": "123456780",
+            "userStatus": 1
+        }
+    ]
+    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
+    assert response.status_code in [409, 200]
