@@ -2,8 +2,8 @@ import requests
 from config import BASE_URL
 API_PATH = "/user/login"
 
+ # Cria o usuário para garantir que existe
 def test_login_user_success():
-    # Cria o usuário para garantir que existe
     user = {
         "id": 10006,
         "username": "userlogin",
@@ -23,8 +23,8 @@ def test_login_user_success():
     assert response.status_code == 200
     assert "logged in user session" in response.text.lower() or "ok" in response.text.lower()
 
+# Usuário existe, mas senha errada
 def test_login_user_wrong_password():
-    # Usuário existe, mas senha errada
     user = {
         "id": 10007,
         "username": "userloginwrong",

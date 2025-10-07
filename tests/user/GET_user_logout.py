@@ -2,8 +2,8 @@ import requests
 from config import BASE_URL
 API_PATH = "/user/logout"
 
+# O logout não exige autenticação real, apenas chama o endpoint
 def test_logout_user_success():
-    # O logout não exige autenticação real, apenas chama o endpoint
     response = requests.get(f"{BASE_URL}/{API_PATH}")
     assert response.status_code in [200, 201, 202]
     # Verifica se há uma mensagem de sucesso na resposta

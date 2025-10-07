@@ -2,8 +2,8 @@ import requests
 from config import BASE_URL
 API_PATH = "/user"
 
+# Garante que o usuário existe antes de buscar
 def test_get_user_by_name_success():
-    # Garante que o usuário existe antes de buscar
     user = {
         "id": 10003,
         "username": "userget",

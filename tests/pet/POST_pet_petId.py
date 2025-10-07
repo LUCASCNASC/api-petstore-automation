@@ -2,8 +2,8 @@ import requests
 from config import BASE_URL
 API_PATH = "/pet"
 
+# Primeiro, cria um pet para garantir que ele exista
 def test_update_pet_with_form_success():
-    # Primeiro, cria um pet para garantir que ele exista
     payload = {
         "id": 12345679,
         "category": {"id": 1, "name": "dog"},

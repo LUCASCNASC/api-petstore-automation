@@ -19,8 +19,8 @@ def test_get_inventory_structure():
         assert isinstance(value, int)
         assert value >= 0
 
+# Testa passando headers customizados
 def test_get_inventory_with_headers():
-    # Testa passando headers customizados
     headers = {"Accept": "application/json"}
     response = requests.get(f"{BASE_URL}/{API_PATH}", headers=headers)
     assert response.status_code == 200

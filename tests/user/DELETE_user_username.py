@@ -2,8 +2,8 @@ import requests
 from config import BASE_URL
 API_PATH = "/user"
 
+# Cria o usuário para garantir que existe
 def test_delete_user_success():
-    # Cria o usuário para garantir que existe
     user = {
         "id": 10005,
         "username": "userdelete",

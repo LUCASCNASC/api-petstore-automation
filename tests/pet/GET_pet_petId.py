@@ -2,8 +2,8 @@ import requests
 from config import BASE_URL
 API_PATH = "/pet"
 
+# Primeiro, cria um pet para garantir que ele exista
 def test_get_pet_by_id_success():
-    # Primeiro, cria um pet para garantir que ele exista
     payload = {
         "id": 12345678,
         "category": {"id": 1, "name": "dog"},
@@ -35,8 +35,8 @@ def test_get_pet_by_id_without_id():
     response = requests.get(f"{BASE_URL}/{API_PATH}/")
     assert response.status_code in [405, 404, 400]
 
+# Cria e deleta um pet, depois tenta buscar
 def test_get_pet_by_id_deleted():
-    # Cria e deleta um pet, depois tenta buscar
     payload = {
         "id": 12345679,
         "category": {"id": 1, "name": "cat"},
