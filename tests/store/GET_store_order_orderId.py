@@ -1,11 +1,13 @@
+import pytest
 import requests
-from config import BASE_URL
 from datetime import datetime
+from config import BASE_URL
+
 API_PATH = "/store/order"
 
-# Cria um pedido para garantir que exista
-def test_get_order_by_id_success():
-    payload = {
+@pytest.fixture
+def order_payload():
+    return {
         "id": 1002,
         "petId": 12345678,
         "quantity": 2,
@@ -13,28 +15,28 @@ def test_get_order_by_id_success():
         "status": "placed",
         "complete": True
     }
-    requests.post(f"{BASE_URL}/{API_PATH}", json=payload)
 
-    response = requests.get(f"{BASE_URL}/{API_PATH}/{payload['id']}")
-    assert response.status_code == 200
+def test_get_order_by_id_success(order_payload):
+    requests.post(f"{BASE_URL}{API_PATH}", json=order_payload)
+    response = requests.get(f"{BASE_URL}{API_PATH}/{order_payload['id']}")
+    assert response.status_code == 200, f"Esperado 200, veio {response.status_code}"
     resp_json = response.json()
-    assert resp_json["id"] == payload["id"]
-    assert resp_json["petId"] == payload["petId"]
-    assert resp_json["quantity"] == payload["quantity"]
-    assert resp_json["status"] == payload["status"]
-    assert resp_json["complete"] == payload["complete"]
+    assert resp_json["id"] == order_payload["id"]
+    assert resp_json["petId"] == order_payload["petId"]
+    assert resp_json["quantity"] == order_payload["quantity"]
+    assert resp_json["status"] == order_payload["status"]
+    assert resp_json["complete"] == order_payload["complete"]
+    # Limpeza
+    requests.delete(f"{BASE_URL}{API_PATH}/{order_payload['id']}")
 
-def test_get_order_by_id_nonexistent():
-    order_id = 99999999
-    response = requests.get(f"{BASE_URL}/{API_PATH}/{order_id}")
-    assert response.status_code == 404
+@pytest.mark.parametrize("order_id,expected_status", [
+    (99999999, [404]),
+    ("invalid", [400, 404])
+])
+def test_get_order_by_id_invalid(order_id, expected_status):
+    response = requests.get(f"{BASE_URL}{API_PATH}/{order_id}")
+    assert response.status_code in expected_status
 
-def test_get_order_by_id_invalid():
-    order_id = "invalid"
-    response = requests.get(f"{BASE_URL}/{API_PATH}/{order_id}")
-    assert response.status_code in [400, 404]
-
-# Cria, deleta e tenta buscar
 def test_get_order_by_id_deleted():
     payload = {
         "id": 1004,
@@ -44,7 +46,7 @@ def test_get_order_by_id_deleted():
         "status": "placed",
         "complete": True
     }
-    requests.post(f"{BASE_URL}/{API_PATH}", json=payload)
-    requests.delete(f"{BASE_URL}/{API_PATH}/{payload['id']}")
-    response = requests.get(f"{BASE_URL}/{API_PATH}/{payload['id']}")
+    requests.post(f"{BASE_URL}{API_PATH}", json=payload)
+    requests.delete(f"{BASE_URL}{API_PATH}/{payload['id']}")
+    response = requests.get(f"{BASE_URL}{API_PATH}/{payload['id']}")
     assert response.status_code == 404
