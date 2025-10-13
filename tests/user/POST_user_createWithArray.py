@@ -1,5 +1,7 @@
+import pytest
 import requests
 from config import BASE_URL
+
 API_PATH = "/user/createWithArray"
 
 def test_create_users_with_array_success():
@@ -25,12 +27,15 @@ def test_create_users_with_array_success():
             "userStatus": 1
         }
     ]
-    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
-    assert response.status_code == 200 or response.status_code == 201
+    response = requests.post(f"{BASE_URL}{API_PATH}", json=users)
+    assert response.status_code in [200, 201]
     assert "message" in response.text or "ok" in response.text.lower()
+    # Limpeza
+    for user in users:
+        requests.delete(f"{BASE_URL}/user/{user['username']}")
 
 def test_create_users_with_array_empty():
-    response = requests.post(f"{BASE_URL}/{API_PATH}", json=[])
+    response = requests.post(f"{BASE_URL}{API_PATH}", json=[])
     assert response.status_code in [400, 405, 422]
 
 def test_create_users_with_array_missing_fields():
@@ -46,7 +51,7 @@ def test_create_users_with_array_missing_fields():
             # "username" omitido
         }
     ]
-    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
+    response = requests.post(f"{BASE_URL}{API_PATH}", json=users)
     assert response.status_code in [400, 405]
 
 def test_create_users_with_array_duplicate():
@@ -72,5 +77,7 @@ def test_create_users_with_array_duplicate():
             "userStatus": 1
         }
     ]
-    response = requests.post(f"{BASE_URL}/{API_PATH}", json=users)
+    response = requests.post(f"{BASE_URL}{API_PATH}", json=users)
     assert response.status_code in [409, 200]
+    # Limpeza
+    requests.delete(f"{BASE_URL}/user/userarray1")

@@ -1,9 +1,11 @@
+import pytest
 import requests
 from config import BASE_URL
+
 API_PATH = "/user/login"
 
- # Cria o usuário para garantir que existe
-def test_login_user_success():
+@pytest.fixture
+def user_login():
     user = {
         "id": 10006,
         "username": "userlogin",
@@ -15,48 +17,59 @@ def test_login_user_success():
         "userStatus": 1
     }
     requests.post(f"{BASE_URL}/user", json=user)
+    yield user
+    requests.delete(f"{BASE_URL}/user/{user['username']}")
 
+def test_login_user_success(user_login):
     response = requests.get(
-        f"{BASE_URL}/{API_PATH}",
-        params={"username": user["username"], "password": user["password"]}
+        f"{BASE_URL}{API_PATH}",
+        params={"username": user_login["username"], "password": user_login["password"]}
     )
     assert response.status_code == 200
     assert "logged in user session" in response.text.lower() or "ok" in response.text.lower()
 
-# Usuário existe, mas senha errada
-def test_login_user_wrong_password():
-    user = {
-        "id": 10007,
-        "username": "userloginwrong",
-        "firstName": "User",
-        "lastName": "LoginWrong",
-        "email": "userloginwrong@email.com",
-        "password": "passright",
-        "phone": "321321321",
-        "userStatus": 1
-    }
-    requests.post(f"{BASE_URL}/user", json=user)
-    response = requests.get(
-        f"{BASE_URL}/{API_PATH}",
-        params={"username": user["username"], "password": "wrongpassword"}
+@pytest.mark.parametrize("user,passwd,expected_status", [
+    (
+        {
+            "id": 10007,
+            "username": "userloginwrong",
+            "firstName": "User",
+            "lastName": "LoginWrong",
+            "email": "userloginwrong@email.com",
+            "password": "passright",
+            "phone": "321321321",
+            "userStatus": 1
+        }, "wrongpassword", [400, 401]
+    ),
+    (
+        None, None, [400, 404, 401]  # Nonexistent user, handled separately
     )
-    assert response.status_code in [400, 401]
-    assert "error" in response.text.lower() or "invalid" in response.text.lower()
-
-def test_login_user_nonexistent():
-    response = requests.get(
-        f"{BASE_URL}/{API_PATH}",
-        params={"username": "notexist", "password": "any"}
-    )
-    assert response.status_code in [400, 404, 401]
+])
+def test_login_user_wrong_password_and_nonexistent(user, passwd, expected_status):
+    if user is not None:
+        # Wrong password
+        requests.post(f"{BASE_URL}/user", json=user)
+        response = requests.get(
+            f"{BASE_URL}{API_PATH}",
+            params={"username": user["username"], "password": passwd}
+        )
+        assert response.status_code in expected_status
+        assert "error" in response.text.lower() or "invalid" in response.text.lower()
+        requests.delete(f"{BASE_URL}/user/{user['username']}")
+    else:
+        # Nonexistent
+        response = requests.get(
+            f"{BASE_URL}{API_PATH}",
+            params={"username": "notexist", "password": "any"}
+        )
+        assert response.status_code in expected_status
 
 def test_login_user_missing_params():
-    response = requests.get(
-        f"{BASE_URL}/{API_PATH}"
-    )
+    response = requests.get(f"{BASE_URL}{API_PATH}")
     assert response.status_code in [400, 404]
 
-def test_login_user_empty_password():
+@pytest.fixture
+def user_login_empty():
     user = {
         "id": 10008,
         "username": "userloginempty",
@@ -68,8 +81,12 @@ def test_login_user_empty_password():
         "userStatus": 1
     }
     requests.post(f"{BASE_URL}/user", json=user)
+    yield user
+    requests.delete(f"{BASE_URL}/user/{user['username']}")
+
+def test_login_user_empty_password(user_login_empty):
     response = requests.get(
-        f"{BASE_URL}/{API_PATH}",
-        params={"username": user["username"], "password": ""}
+        f"{BASE_URL}{API_PATH}",
+        params={"username": user_login_empty["username"], "password": ""}
     )
     assert response.status_code in [400, 401]
