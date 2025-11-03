@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+
 API_PATH = "/user/logout"
 
 def test_logout_user_success():

@@ -1,5 +1,6 @@
 import requests
 from config import BASE_URL
+
 API_PATH = "/store/inventory"
 
 def test_get_inventory_success():
