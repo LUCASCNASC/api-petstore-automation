@@ -1,6 +1,7 @@
 import pytest
 import requests
 from config import BASE_URL
+
 API_PATH = "/pet/findByStatus"
 
 @pytest.mark.parametrize("status", ["pending"])
