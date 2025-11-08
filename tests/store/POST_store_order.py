@@ -2,7 +2,6 @@ import pytest
 import requests
 from datetime import datetime
 from config import BASE_URL
-
 API_PATH = "/store/order"
 
 @pytest.fixture
