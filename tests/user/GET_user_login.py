@@ -1,7 +1,6 @@
 import pytest
 import requests
 from config import BASE_URL
-
 API_PATH = "/user/login"
 
 @pytest.fixture

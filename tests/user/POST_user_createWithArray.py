@@ -1,7 +1,6 @@
 import pytest
 import requests
 from config import BASE_URL
-
 API_PATH = "/user/createWithArray"
 
 def test_create_users_with_array_success():
